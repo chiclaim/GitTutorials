@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<manifest>
-     <remote name="origin" fetch="."/>
-
-     <default revision="master" remote="origin" sync-j="4" />
-
-     <project name="AndroidUpdater"      path="AndroidUpdater"/>
-     <project name="MRouter"             path="MRouter"/>
-</manifest>
