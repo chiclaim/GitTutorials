@@ -1,1 +1,6 @@
-# Google Repo Manifest
+# Git 入门到放弃
+
+
+
+
+
