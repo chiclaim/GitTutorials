@@ -17,7 +17,7 @@ git config user.email "xxx@xxx"
 
 但是项目多了，就比较麻烦，而且容易忘记。可以使用 `includeIf` 来设置，步骤如下：
 
-创建两个 `git-config` 文件：
+创建两个 `git-config` 文件，一个用于公司项目 一个用于个人项目：
 
 **.gitconfig-personal** 
 
