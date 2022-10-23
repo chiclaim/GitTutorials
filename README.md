@@ -24,21 +24,21 @@ git area 主要由以下几个：
 
 ## git 撤销操作汇总
 
-撤销文件在 `workspace area` 的修改，可以使用：
+撤销 `workspace area` 的修改，可以使用：
 
 ```
 git checkout filenames
 git restore filenames // git 2.23.0 新增命令
 ```
 
-撤销文件在 `stage area` 的修改（会保留 workspace area，文件会变成 untracked 状态），可以使用：
+撤销 `stage area` 的修改（会保留 workspace area，文件会变成 untracked 状态），可以使用：
 
 ```
 git reset filenames
 git restore --staged filenames
 ```
 
-撤销文件在 `local repository` 的修改，可以使用：
+撤销 `local repository` 的修改，可以使用：
 
 ```
 git reset --soft HEAD~1
@@ -94,7 +94,22 @@ total 0
 > 如果是个人分支如 feature，没有其他人修改，撤销时可以使用 git reset.
 > 如果是公共分支，其他人也正在使用，如果使用 git reset，然后 push -f，那么其他人的本地 pull 的时候，他本地的记录可能就乱了。所以公共分支建议使用 git revert
 
+## 删除操作汇总
 
+- **git clean 删除 working tree 中的 untracked file**
+
+  `git clean -f -d` 其中 -f(force)，-d(directory)    
+   需要注意的是，该命令不能删除 tracked file，如果需要将丢弃所有最近未 commit 的内容
+   可以先执行 `git checkout .` 然后执行 `git clean -f -d`
+
+
+- **git rm 从 working tree 和 index 中移除文件**
+
+    `git rm file` 文件会从 working tree 和 index 中移除
+    如果仅仅从 index 中移除，但保留在 working tree，可以使用 `git rm --cache`，那么文件会保留(cache)在 working tree 中
+    如果文件不在 index 中，即 untracked，那么 git rm 无法删除该文件
+    例如：你想将某个已提交的目录(.idea)，加入到 ignore 中，那么你可以：`git rm --cached -r .idea`, 然后修改 .ignore 文件，最后，commit, push
+    
 
 ## git 多用户
 
