@@ -108,7 +108,7 @@ total 0
     `git rm file` 文件会从 working tree 和 index 中移除
     如果仅仅从 index 中移除，但保留在 working tree，可以使用 `git rm --cache`，那么文件会保留(cache)在 working tree 中
     如果文件不在 index 中，即 untracked，那么 git rm 无法删除该文件
-    例如：你想将某个已提交的目录(.idea)，加入到 ignore 中，那么你可以：`git rm --cached -r .idea`, 然后修改 .ignore 文件，最后，commit, push
+    例如：你想将某个已提交的目录(.idea)，加入到 ignore 中，那么你可以：`git rm --cached -r .idea`, 然后修改 .gitignore 文件，最后，commit, push
     
 
 ## git 多用户
