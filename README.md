@@ -1,7 +1,7 @@
 # GitTutorials
 
 
-## git area
+## git area（重要）
 
 git area 主要由以下几个：
 - workspace area 也称之为 working tree
@@ -22,51 +22,78 @@ git area 主要由以下几个：
 - `git ls-files` 显示 index area 或 working tree 的文件信息
 - `git status` 显示 working tree 的状态
 
-## git 撤销操作汇总
+## git 撤销操作
 
-撤销 `workspace area` 的修改，可以使用：
+
+### 使用场景 1
+
+当你在工作区，写了若干代码，但是你发现，这些代码没用，需要将这些修改撤销，但是修改的文件较多不可能一个一个文件手动撤销，这时你可以使用如下命令：
 
 ```
-git checkout filenames
+// 如果文件是新增的，处于 untracked（撤销所有）
+git clean -f   // 如果有目录可以加上 -d
+
+// 如果文件是新增的（撤销指定）
+git clean -f filenames
+
+// 如果是在已经存在文件基础上修改（撤销所有）
+git checkout .
+
+// 如果是在已经存在文件基础上修改（撤销指定文件）
+git checkout filenames // 撤销指定文件
 git restore filenames // git 2.23.0 新增命令
 ```
 
-撤销 `stage area` 的修改（会保留 workspace area，文件会变成 untracked 状态），可以使用：
+上面的命令只会撤销 `workspace area` 的修改。
+
+### 使用场景 2
+
+当你写了若干代码后，执行了 git add（或 IDE 设置了自动 git add），那么文件的处于 tracked 状态，修改内容在 stage area(index area) 区域中
+
+此时你想撤销修改，但是修改的内容还想保留到工作区（仅仅从 stage area 撤销，即变成 untracked 状态），可以使用如下命令：
 
 ```
-git reset filenames
-git restore --staged filenames
+git reset  // 针对所有修改
+git reset filenames  // 指定具体文件
+git restore --staged filenames  // 指定具体文件
 ```
 
-撤销 `local repository` 的修改，可以使用：
+如果撤销时不想保留工作区，可以使用：
 
 ```
+// 不管是否是新建的文件、文件夹会一并被撤销
+git checkout -f // 无法指定文件名
+```
+
+### 使用场景3
+
+当你的修改已经 commit（local repository），此时想要撤销怎么办？可以使用如下命令：
+
+```
+// 撤销后，修改会保留在 staging area 和 workspace area
 git reset --soft HEAD~1
-```
-> HEAD~1 表示回到当前(HEADER) commit 记录的上 1 个 commit.
 
-同时撤销文件在 `local repository` 和 `staging area` 的修改：
+// 撤销后，修改会保留在 workspace area
+git reset --mixed HEAD~1   // 等同 git reset HEAD~1
 
-```
-git reset --mixed HEAD~1
-// 等同
-git reset HEAD~1
-```
-
-同时撤销文件在 `local repository` 和 `staging area`、`workspace area` 的修改：
-
-```
+// 同时撤销在 `local repository` 和 `staging area`、`workspace area` 的修改：
 git reset --hard HEAD~1  // 使用的时候需要注意
 ```
 
+> HEAD~1 表示回到当前(HEAD) commit 记录的上 1 个 commit.
 
-除了 `git reset` 还可以使用 `git revert`，它不会撤销原来的 commit 记录，而是新增一条记录。
+### git reset VS git revert
 
+`git revert`，它不会撤销原来的 commit 记录，而是新增一条 commit 记录。
+
+`git revert commit_id`，会在该 commit_id 的基础上做反操作，例如，添加一行，他就会删除该行。
+
+使用时也可以使用 `HEAD~`，如：
 ```
 git revert HEAD~1
 ```
 
-git revert 还可以撤销中间的某个 commit，其他的 commit 保持不变（git reset 则很难做到这一点），如：
+git revert 还可以撤销中间的某个 commit，其他的 commit 保持不变（git reset 则做不到这一点），如：
 
 ```
 // 例如 commit 4 次，每次新增了一个文件，log 日志如下所示：
@@ -91,8 +118,13 @@ total 0
 // 可以看到第三次提交的文件不见了
 ```
 
-> 如果是个人分支如 feature，没有其他人修改，撤销时可以使用 git reset.
-> 如果是公共分支，其他人也正在使用，如果使用 git reset，然后 push -f，那么其他人的本地 pull 的时候，他本地的记录可能就乱了。所以公共分支建议使用 git revert
+reset 和 revert 使用场景的异同：
+
+1. 如果撤销的是你个人的分支（分支只有你一个人修改），可以使用 git reset，这样 git 记录也比较简洁
+2. 如果你需要撤销 git 记录中间的某条 commit，可以使用 git revert
+3. 如果撤销的是公共分支 （其他正在使用），则建议使用 git revert。如果使用 git reset 的话，当你 push 的时候后，其他人 pull，其本地记录可能会乱。
+
+
 
 ## 删除操作汇总
 
