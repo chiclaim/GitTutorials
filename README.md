@@ -141,6 +141,21 @@ reset 和 revert 使用场景的异同：
     如果仅仅从 index 中移除，但保留在 working tree，可以使用 `git rm --cache`，那么文件会保留(cache)在 working tree 中
     如果文件不在 index 中，即 untracked，那么 git rm 无法删除该文件
     例如：你想将某个已提交的目录(.idea)，加入到 ignore 中，那么你可以：`git rm --cached -r .idea`, 然后修改 .gitignore 文件，最后，commit, push
+- **删除已经push的大文件**
+  
+  `python3 -m pip install git-filter-repo` （git 官方推荐）
+   按照文件大小升序排列并取最后40个文件:
+  ```
+  git rev-list --objects --all | grep "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -40 | awk '{print$1}')"
+  ```
+  例如删除，已经 push 的 apk 文件
+  ```
+  git filter-repo --force --invert-paths --path-regex .+\.apk
+  ```
+  最后 push
+  ```
+  git push -f origin master
+  ```
     
 
 ## git 多用户
