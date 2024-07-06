@@ -148,6 +148,17 @@ reset 和 revert 使用场景的异同：
   ```
   git rev-list --objects --all | grep "$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -40 | awk '{print$1}')"
   ```
+  打印文件大小(brew install coreutils)：
+  ```
+	git rev-list --objects --all \
+	| git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \
+	| sed -n 's/^blob //p' \
+	| sort --numeric-sort --key=2 \
+	| tail -n 20 \
+	| cut -c 1-12,41- \
+	| $(command -v gnumfmt || echo numfmt) --field=2 --to=iec-i --suffix=B --padding=7 --round=nearest
+  ```
+  
   例如删除，已经 push 的 apk 文件
   ```
   git filter-repo --force --invert-paths --path-regex .+\.apk
