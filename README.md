@@ -167,6 +167,7 @@ reset 和 revert 使用场景的异同：
   ```
   git push -f origin master
   ```
+  > https://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories-on-rebase
     
 
 ## git 多用户
