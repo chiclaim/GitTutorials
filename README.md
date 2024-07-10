@@ -169,6 +169,40 @@ reset 和 revert 使用场景的异同：
   ```
   > https://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories-on-rebase
     
+## 代码合并
+
+```
+git merge master
+```
+
+也可以：
+```
+git pull origin master
+```
+如果提示如下错误：
+```
+hint: Diverging branches can't be fast-forwarded, you need to either:
+hint:
+hint: 	git merge --no-ff
+hint:
+hint: or:
+hint:
+hint: 	git rebase
+hint:
+hint: Disable this message with "git config advice.diverging false"
+```
+
+```
+# you can use disable pull rebase by:
+git config pull.rebase false
+
+# and change ff only to true
+git config pull.ff true
+```
+
+
+
+
 
 ## git 多用户
 
